@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>주식 앱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📈 간단 주식 조회</h1>
+
+  <p>종목 코드 입력 (예: AAPL, TSLA)</p>
+  <input id="symbol" placeholder="AAPL" />
+  <br>
+  <button onclick="getStock()">조회</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function getStock() {
+      const symbol = document.getElementById("symbol").value;
+      if (!symbol) {
+        alert("종목 코드를 입력하세요");
+        return;
+      }
+
+      const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`;
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        const price = data.quoteResponse.result[0].regularMarketPrice;
+
+        document.getElementById("result").innerText =
+          symbol + " 현재가: " + price;
+      } catch (e) {
+        document.getElementById("result").innerText =
+          "가져오지 못했습니다";
+      }
+    }
+  </script>
+
+</body>
+</html>
